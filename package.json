@@ -1,0 +1,28 @@
+{
+  "name": "brunch-app",
+  "description": "Brunch.io application",
+  "private": true,
+  "author": "Brunch",
+  "version": "0.0.1",
+  "repository": "",
+  "scripts": {
+    "start": "brunch watch --server",
+    "build": "brunch build --production"
+  },
+  "dependencies": {
+    "canvas-arrow-path": "^1.0.1",
+    "config": "^1.25.1",
+    "jquery": "^3.2.1",
+    "less-brunch": "^2.10.0",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.9.6",
+    "restify": "^4.3.0",
+    "shortid": "^2.2.8"
+  },
+  "devDependencies": {
+    "auto-reload-brunch": "^2",
+    "brunch": "^2",
+    "clean-css-brunch": "^2",
+    "uglify-js-brunch": "^2"
+  }
+}

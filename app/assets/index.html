@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <title>Arrowly - Point at stuff</title>
+      <meta name="description" content="Arrowly - Point at stuff">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      
+      <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+      <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+      <!--<link rel="stylesheet" href="css/main.css"> -->
+      <link rel="stylesheet" href="/app.css">
+      <script src="/app.js"></script>
+      <script>require('initialize');</script>
+  </head>
+  <body>
+    <header class="flex-container flex-space-between">
+      <div id="logo">Arrowly - Point at stuff</div>
+      <input id="code" type="text" placeholder="Arrowly Code">
+    </header>
+    <div id="businesstime" class="unloaded">
+      <div class="instructions">1. Drag an image here, or click to open an image</div>
+    </div>
+    <div id="messageModal" class="modal hidden">
+      <div class="container">
+        <div class="content">
+          <input id="messageInput" type="text" placeholder="Message">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
