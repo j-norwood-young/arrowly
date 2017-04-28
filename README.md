@@ -1,16 +1,19 @@
-# Brunch app
+# Arrowly
+## Point at stuff
 
-This is a HTML5 application, built with [Brunch](http://brunch.io).
+Arrowly lets you upload an image, and point arrows at it. You can go back to your image at any time by going to the URL or inputing a code. 
 
-## Getting started
-* Install (if you don't have them):
-    * [Node.js](http://nodejs.org): `brew install node` on OS X
-    * [Brunch](http://brunch.io): `npm install -g brunch`
-    * Brunch plugins and app dependencies: `npm install`
-* Run:
-    * `npm start` — watches the project with continuous rebuild. This will also launch HTTP server with [pushState](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history).
-    * `npm run build` — builds minified project for production
-* Learn:
-    * `public/` dir is fully auto-generated and served by HTTP server.  Write your code in `app/` dir.
-    * Place static files you want to be copied from `app/assets/` to `public/`.
-    * [Brunch site](http://brunch.io), [Getting started guide](https://github.com/brunch/brunch-guide#readme)
+It is currently in early development phase. You can upload a pic, draw a single arrow, add a line of text to the arrow. It saves the original picture on upload and retrieves it using the code or location hash. 
+
+### It still needs
+* Better-looking arrows
+* Multiple arrows
+* Saving of arrows
+* Changing colours
+* Changing arrowhead styles
+* Changing line widths/styles
+* Better font placement if near an edge
+
+The front end is built with Brunch and the back end runs on NodeJS with a MongoDB database. To run install, `npm install`.
+
+To run (assuming you have Mongo, Node and Brunch) run the API with `npm server.js` and the Brunch with `brunch w --server`.
