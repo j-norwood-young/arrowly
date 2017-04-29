@@ -29,7 +29,7 @@ var ArrowDrawer = function(opts) {
 		// console.log(e);
 		self.isDrawing = true;
 		clearDrawing();
-		arrow = new Arrow();
+		arrow = new Arrow({ ctx, arrowHeadLength: 60 });
 		arrow.startX = getMousePos(e).x;
 		arrow.startY = getMousePos(e).y;
 	};
