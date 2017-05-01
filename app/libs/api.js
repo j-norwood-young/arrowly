@@ -14,6 +14,28 @@ var API = {
 	},
 	get: function(id) {
 		return $.get(url + "/get/" + id);
+	},
+	update: function(id, data) {
+		$.ajax({
+			url: url + "/save/" + id,
+			type: 'PUT',
+			data
+		})
+		.then(result => {
+			eventhandler.trigger("updated", result.result);
+		})
+		.catch(err => {
+			console.error(err);
+		});
+	},
+	addArrow: function(id, data) {
+		var self = this;
+		self.get(id)
+		.then(result => {
+			var arrows = result.arrows || [];
+			arrows.push(data);
+			self.update(id, { arrows });
+		});
 	}
 };
 
