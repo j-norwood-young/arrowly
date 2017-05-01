@@ -1,23 +1,25 @@
 var $ = require("jquery");
 
 var Arrow = function(opts) {
-	var self = this;
 	opts = opts || {};
-	var canvas = opts.canvas || document.getElementById("drawingLayer");
-	self.ctx = opts.ctx || canvas.getContext("2d");
-	self.startX = (opts.start) ? opts.start[0] : 0;
-	self.startY = (opts.start) ? opts.start[1] : 0;
-	self.endX = (opts.end) ? opts.end[0] : 0;
-	self.endY = (opts.end) ? opts.end[1] : 0;
-	self.ctx.strokeStyle = opts.colour || "#000000";
-	self.ctx.lineWidth = opts.weight || 10;
-	self.arrowHeadLength = opts.arrowHeadLength || 30;
+	var self = {
+		startX : (opts.start) ? opts.start[0] : 0,
+		startY : (opts.start) ? opts.start[1] : 0,
+		endX : (opts.end) ? opts.end[0] : 0,
+		endY : (opts.end) ? opts.end[1] : 0,
+		arrowHeadLength : opts.arrowHeadLength || 30,
+		ctx : opts.ctx || null,
+		colour : opts.colour || "#000000",
+		width : opts.weight || 10,
+	};
 
 	var drawLine = () => {
 		var dx = self.endX - self.startX;
 		var dy = self.endY - self.startY;
 		var rot = -Math.atan2(dx, dy);
 		var len = Math.sqrt(dx * dx + dy * dy);
+		self.ctx.strokeStyle = self.colour;
+		self.ctx.lineWidth = self.width;
 		self.ctx.save();
 		self.ctx.translate(self.startX, self.startY);
 		self.ctx.rotate(rot);
@@ -36,8 +38,8 @@ var Arrow = function(opts) {
 		self.ctx.translate(self.endX, self.endY);
 		self.ctx.rotate(radians);
 		self.ctx.moveTo(0,0);
-		self.ctx.lineTo(20, self.arrowHeadLength);
-		self.ctx.lineTo(-20, self.arrowHeadLength);
+		self.ctx.lineTo(self.width * 2.5, self.arrowHeadLength);
+		self.ctx.lineTo(self.width * -2.5, self.arrowHeadLength);
 		self.ctx.closePath();
 		self.ctx.restore();
 		self.ctx.fill();
