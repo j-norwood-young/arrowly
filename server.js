@@ -19,8 +19,27 @@ server.use(
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
-server.post("/save", (req, res) => {
-	var arrowly = new Arrowly({ img: req.params.img });
+var data = (req, res, next) => {
+	console.log(req);
+	res.data = {};
+	if (req.params.img)
+		res.data.img = req.params.img;
+	if (req.params.arrows)
+		res.data.arrows = req.params.arrows;
+	next();
+};
+
+var getById = (req, res, next) => {
+	var arrowly = Arrowly.findOne({ id: req.params.id }, (err, result) => {
+		if (err)
+			return res.send(500, { status: "error", error: err });
+		res.arrowly = result;
+		next();
+	});
+};
+
+server.post("/save", data, (req, res) => {
+	var arrowly = new Arrowly(res.data);
 	arrowly.save((err, result) => {
 		console.log(err, result);
 		if (err)
@@ -29,17 +48,24 @@ server.post("/save", (req, res) => {
 	});
 });
 
-server.get("/get/:id", (req, res) => {
-	var id = req.params.id;
-	console.log(id);
-	var arrowly = Arrowly.find({ id }, (err, result) => {
+server.put("/save/:id", getById, data, (req, res) => {
+	// for (var i in res.data) {
+	// 	console.log(i);
+	// 	res.arrowly[i] = data[i];
+	// }
+	// console.log(res.arrowly);
+	console.log(res.data);
+	res.arrowly.update(res.data, (err, result) => {
 		if (err)
 			return res.send(500, { status: "error", error: err });
-		if (result.length)
-			result = result.pop();
 		return res.send({ status: "ok", result });
 	});
 });
+
+server.get("/get/:id", getById, (req, res) => {
+	return res.send({ status: "ok", data: res.arrowly });
+});
+
 
 server.listen(config.port, function() {
 	console.log('%s listening at %s', server.name, server.url);
