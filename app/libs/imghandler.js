@@ -1,5 +1,5 @@
 var $ = require("jquery");
-var eventhandler = require("../libs/eventhandler");
+var eventhandler = require("../events/eventhandler");
 
 var ImgHandler = function(opts) {
 	var self = this;

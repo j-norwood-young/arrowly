@@ -3,10 +3,10 @@ var $ = require("jquery");
 var Arrow = function(opts) {
 	opts = opts || {};
 	var self = {
-		startX : (opts.start) ? opts.start[0] : 0,
-		startY : (opts.start) ? opts.start[1] : 0,
-		endX : (opts.end) ? opts.end[0] : 0,
-		endY : (opts.end) ? opts.end[1] : 0,
+		startX : opts.startX || 0,
+		startY : opts.startY || 0,
+		endX : opts.endX || 0,
+		endY : opts.endY || 0,
 		arrowHeadLength : opts.arrowHeadLength || 30,
 		ctx : opts.ctx || null,
 		colour : opts.colour || "#000000",

@@ -1,7 +1,4 @@
 var _ = require("lodash");
-
-var eventhandler = require("./libs/eventhandler");
-var ArrowDrawer = require("./libs/arrowdrawer");
 var $ = require("jquery");
 var State = require("./libs/state");
 

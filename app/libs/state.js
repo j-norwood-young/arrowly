@@ -1,5 +1,5 @@
 var _ = require("lodash");
-var eventhandler = require("../libs/eventhandler");
+var eventhandler = require("../events/eventhandler");
 var ArrowDrawer = require("../libs/arrowdrawer");
 var API = require("../libs/api");
 var ImgHandler = require("../libs/imghandler");
@@ -10,19 +10,20 @@ var State = function() {
 	var self = this;
 	self.currentId = $("#code").val();
 	var imghandler = new ImgHandler();
-	var arrowdrawer = null;
 
 	eventhandler.listen("img-loaded", (params) => {
 		var el = $("<canvas id='drawingLayer'>");
 		el[0].width = params.width;
 		el[0].height = params.height;
 		$("#businesstime").append(el);
+		var data = {
+			img: params.src,
+			width: params.width,
+			height: params.height,
+		};
 		if (!params.id) {
-			API.save({
-				img: params.src
-			});
+			API.save(data);
 		}
-		arrowdrawer = new ArrowDrawer();
 	});
 
 	eventhandler.listen("saved", params => {
@@ -50,6 +51,14 @@ var State = function() {
 		self.loadId();
 	};
 
+	var fixArrow = arrow => {
+		arrow.startX = Number(arrow.startX);
+		arrow.startY = Number(arrow.startY);
+		arrow.endX = Number(arrow.endX);
+		arrow.endY = Number(arrow.endY);
+		return arrow;
+	};
+
 	self.loadId = () => {
 		var id = $("#code").val();
 		if ((id.length >= 8) && (id != self.currentId)) {
@@ -57,8 +66,9 @@ var State = function() {
 			.then(result => {
 				self.currentId = id;
 				imghandler.populateImg(result.data.img, id);
-				result.data.arrows.forEach(arrow => {
-					// arrowdrawer.draw(arrow);
+				arrowdrawer = new ArrowDrawer();
+				result.data.arrows.map(fixArrow).forEach(arrow => {
+					arrowdrawer.draw(arrow, result.data.width, result.data.height);
 				});
 			})
 			.catch(err => {

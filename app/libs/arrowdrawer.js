@@ -1,4 +1,4 @@
-var eventhandler = require("../libs/eventhandler");
+var eventhandler = require("../events/eventhandler");
 var Arrow = require("../libs/arrow");
 var $ = require("jquery");
 var levelCount = 1;
@@ -12,6 +12,7 @@ var ArrowDrawer = function(opts) {
 	var canvas = null;
 	var ctx = null;
 	var text = null;
+	self.active = false;
 
 	var getMousePos = (e) => {
 		var rect = canvas.getBoundingClientRect();
@@ -47,7 +48,7 @@ var ArrowDrawer = function(opts) {
 	};
 
 	var saveDrawing = () => {
-		self.draw(arrow);
+		self.replicate(arrow);
 		createDrawingLayer();
 	};
 
@@ -69,15 +70,19 @@ var ArrowDrawer = function(opts) {
 	var cancelDrawing = e => {
 	};
 
+	self.drawText = (ctx, arrow, text) => {
+		var offset = (arrow.startY <= arrow.endY) ? -15 : 15;
+		var baseline = (arrow.startY <= arrow.endY) ? "bottom" : "top";
+		ctx.font = "40px Helvetica";
+		ctx.textAlign = "center";
+		ctx.textBaseline = baseline;
+		ctx.fillText(text, arrow.startX, arrow.startY + offset);
+	};
+
 	var saveMessage = e => {
 		text = $("#messageInput").val();
 		$("#messageModal").addClass("hidden");
-		// Above or below?
-		var offset = (arrow.startY <= arrow.endY) ? -15 : 15;
-		ctx.font = "40px Helvetica";
-		ctx.textAlign = "center";
-		ctx.textBaseline = (arrow.startY <= arrow.endY) ? "bottom" : "top";
-		ctx.fillText(text, arrow.startX, arrow.startY + offset);
+		self.drawText(ctx, arrow, text);
 		saveDrawing();
 	};
 
@@ -91,14 +96,14 @@ var ArrowDrawer = function(opts) {
 			saveMessage(e);
 	});
 
-	$("#businesstime").on("mousedown", "#drawingLayer", startDrawing);
-	$("#businesstime").on("mouseup", "#drawingLayer", endDrawing);
-	$("#businesstime").on("mousemove", "#drawingLayer", updateDrawing);
-	$("#businesstime").on("mouseout", "#drawingLayer", cancelDrawing);
-
-	console.log("Waiting for mouse events");
+	eventhandler.listen("img-loaded", params => {
+		$("#businesstime").on("mousedown", "#drawingLayer", startDrawing);
+		$("#businesstime").on("mouseup", "#drawingLayer", endDrawing);
+		$("#businesstime").on("mousemove", "#drawingLayer", updateDrawing);
+		$("#businesstime").on("mouseout", "#drawingLayer", cancelDrawing);
+	});
 	
-	self.draw = (arrow) => {
+	self.replicate = (arrow) => {
 		var el = $(`<canvas id='arrowLayer${levelCount++}' class='arrow-layer'>`);
 		el[0].width = canvas.width;
 		el[0].height = canvas.height;
@@ -110,7 +115,25 @@ var ArrowDrawer = function(opts) {
 		var ctx = el[0].getContext("2d");
 		ctx.drawImage(canvas, 0, 0);
 		$("#businesstime").append(el);
-		eventhandler.trigger("arrow-drawn", { startX: arrow.startX, startY: arrow.startY, endX: arrow.endX, endY: arrow.endY, text: text });
+		eventhandler.trigger("arrow-drawn", { startX: arrow.startX, startY: arrow.startY, endX: arrow.endX, endY: arrow.endY, text });
+	};
+
+	self.draw = (arrow, width, height) => {
+		var el = $(`<canvas id='arrowLayer${levelCount++}' class='arrow-layer'>`);
+		el[0].width = width;
+		el[0].height = height;
+		el.data("startX", arrow.startX);
+		el.data("startY", arrow.startY);
+		el.data("endX", arrow.endX);
+		el.data("endY", arrow.endY);
+		el.data("text", arrow.text);
+		var ctx = el[0].getContext("2d");
+		arrow.ctx = ctx;
+		var newarrow = new Arrow(arrow);
+		newarrow.draw();
+		self.drawText(ctx, newarrow, arrow.text);
+		$("#businesstime").append(el);
+		eventhandler.trigger("arrow-redrawn", newarrow);
 	};
 
 	return self;

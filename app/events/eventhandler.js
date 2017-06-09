@@ -2,6 +2,7 @@ var eventListners = {};
 
 var EventHandler = {
 	listen: (event, fn) => {
+		console.log("listen", event);
 		if (!eventListners[event]) {
 			eventListners[event] = [fn];
 		} else {
@@ -9,6 +10,7 @@ var EventHandler = {
 		}
 	},
 	trigger: (event, params) => {
+		console.log("trigger", event, params);
 		if (eventListners[event]) {
 			eventListners[event].forEach(fn => {
 				fn(params);

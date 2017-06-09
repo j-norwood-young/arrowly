@@ -1,4 +1,4 @@
-var eventhandler = require("../libs/eventhandler");
+var eventhandler = require("../events/eventhandler");
 var $ = require("jquery");
 var url = "http://localhost:6001";
 

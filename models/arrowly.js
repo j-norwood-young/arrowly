@@ -7,6 +7,8 @@ var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var ArrowlySchema   = new Schema({
 	id: { type: String, index: true, unique: true, default: shortid.generate },
+	width: Number,
+	height: Number,
 	arrows: [ Mixed ],
 	img: String,
 	date_created: { type: Date, default: Date.now },

@@ -16,16 +16,17 @@ server.use(
 		return next();
 	}
 );
-server.use(restify.queryParser());
+// server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
 var data = (req, res, next) => {
-	console.log(req);
-	res.data = {};
-	if (req.params.img)
-		res.data.img = req.params.img;
-	if (req.params.arrows)
-		res.data.arrows = req.params.arrows;
+	res.data = req.params;
+	// if (req.params.img)
+	// 	res.data.img = req.params.img;
+	// if (req.params.arrows)
+	// 	res.data.arrows = req.params.arrows;
+	// if (req.params.width)
+	// 	res.data.width = req.params.width;
 	next();
 };
 
@@ -40,8 +41,9 @@ var getById = (req, res, next) => {
 
 server.post("/save", data, (req, res) => {
 	var arrowly = new Arrowly(res.data);
+	console.log(res.data.width);
 	arrowly.save((err, result) => {
-		console.log(err, result);
+		console.log(err, result.width);
 		if (err)
 			return res.send(500, { status: "error", error: err });
 		return res.send({ status: "ok", result });
